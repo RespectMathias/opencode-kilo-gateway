@@ -1,21 +1,26 @@
-# Kilo Gateway Provider Plugin for OpenCode
+# Kilo Gateway OAuth Plugin for OpenCode
 
-Use Kilo Gateway as a dedicated `kilo` provider inside OpenCode.
+This plugin adds OAuth device login for the `kilo` provider in OpenCode.
 
-This plugin adds:
+Keep it simple:
 
-- Kilo device authorization login
-- Kilo request headers for routed provider calls
-- auth loading for a dedicated `kilo` provider configured in OpenCode
+- if you only want Kilo free models, you do not need this plugin
+- if you want Kilo account-backed models, use this plugin for OAuth login
+- the `kilo` provider itself still belongs in `opencode.json`
 
-## Install
+## Warning
 
-Add the plugin package to your OpenCode config:
+The `kilo` provider configuration itself is just normal provider usage.
+
+The OAuth flow in this plugin may violate Kilo's terms of service or future product restrictions. Use it at your own risk.
+
+## Without the plugin
+
+If you only want free models, configure the provider and stop there:
 
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": ["opencode-kilo-gateway@latest"],
   "provider": {
     "kilo": {
       "name": "Kilo Gateway",
@@ -26,7 +31,27 @@ Add the plugin package to your OpenCode config:
 }
 ```
 
-The provider itself is defined in your `opencode.json`. This plugin only supplies Kilo authentication and request loading for that provider.
+## With the plugin
+
+Add the plugin and keep the same provider config:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "file:///C:/Users/User/.config/opencode/node_modules/opencode-kilo-gateway/dist/index.js"
+  ],
+  "provider": {
+    "kilo": {
+      "name": "Kilo Gateway",
+      "npm": "@ai-sdk/openai-compatible",
+      "api": "https://api.kilo.ai/api/openrouter"
+    }
+  }
+}
+```
+
+This plugin only adds OAuth login and Kilo request loading for that provider.
 
 ## Login
 
@@ -38,22 +63,24 @@ opencode auth login
 
 Then choose:
 
-- `kilo`
+- `Kilo Gateway`
 - `Kilo Gateway`
 
-## Usage
+You should get the same device flow shape as Kilo CLI:
 
-Example:
+- browser opens to Kilo device auth
+- code is shown in the terminal
+- OpenCode waits for authorization
+
+## Usage
 
 ```bash
 opencode run "Hello" --model=kilo/kilo-auto/frontier
 ```
 
-Which models appear is controlled by OpenCode's configured `kilo` provider and whatever the gateway returns for that provider path.
+Which models appear is controlled by the configured `kilo` provider and the gateway.
 
 ## Optional provider options
-
-Add these under `provider.kilo.options` in `opencode.json` if needed:
 
 ```json
 {
@@ -68,24 +95,55 @@ Add these under `provider.kilo.options` in `opencode.json` if needed:
 }
 ```
 
-- `baseURL`: override the Kilo API host
-- `kilocodeOrganizationId`: force a specific organization context
+- `baseURL` overrides the Kilo API host
+- `kilocodeOrganizationId` forces an organization context
+
+## Dev
+
+Build the plugin locally:
+
+```bash
+npm install
+npm run build
+```
+
+Install it into your OpenCode config directory:
+
+```bash
+cd C:\Users\User\.config\opencode
+npm install "C:\Users\User\source\repos\plugin\opencode-kilo-gateway"
+```
+
+Then point `opencode.json` at the built file:
+
+```json
+{
+  "plugin": [
+    "file:///C:/Users/User/.config/opencode/node_modules/opencode-kilo-gateway/dist/index.js"
+  ]
+}
+```
+
+When you change the plugin locally, rebuild it before testing:
+
+```bash
+npm run build
+```
 
 ## Syncing with upstream Kilo
 
-This plugin keeps a small sync helper instead of depending directly on the Kilo fork package.
+This package keeps a small sync helper instead of depending directly on the Kilo fork package.
 
 ```bash
 npm run sync:kilo -- <tag-or-commit>
 ```
 
-That script snapshots a few Kilo gateway source files into `vendor/kilo-gateway/` for comparison when upstream changes.
+## Note
 
-## Development
+How is this different from other Kilo plugins?
 
-```bash
-npm install
-npm run typecheck
-npm test
-npm run build
-```
+- this one knows Kilo provider setup already populates models
+- you do not need it for free models
+- it provides a working OAuth device login flow
+- you do not need to choose `Other`
+- it is based directly on Kilo CLI gateway auth code

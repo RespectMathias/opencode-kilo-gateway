@@ -1,0 +1,12 @@
+This project includes code derived from Kilo Code.
+
+Source repository:
+https://github.com/Kilo-Org/kilocode
+
+Derived areas in this package include the Kilo Gateway device authorization flow
+and related request-loading behavior adapted for an OpenCode plugin.
+
+Kilo Code is licensed under the MIT License.
+
+Copyright (c) 2025 Kilo Code
+Copyright (c) 2025 opencode
