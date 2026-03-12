@@ -1,6 +1,6 @@
 {
   "name": "opencode-kilo-gateway",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Kilo Gateway provider plugin for OpenCode",
   "author": "respectmathias",
   "main": "./dist/index.js",
@@ -37,8 +37,7 @@
     "build": "npm run clean && tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "sync:kilo": "node ./scripts/sync-kilo-gateway.mjs"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@opencode-ai/plugin": "^0.15.31",

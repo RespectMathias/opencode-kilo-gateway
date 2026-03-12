@@ -96,14 +96,6 @@ When you change the plugin locally, rebuild it before testing:
 npm run build
 ```
 
-## Syncing with upstream Kilo
-
-This package keeps a small sync helper instead of depending directly on the Kilo fork package.
-
-```bash
-npm run sync:kilo -- <tag-or-commit>
-```
-
 ## Note
 
 How is this different from other Kilo plugins?
