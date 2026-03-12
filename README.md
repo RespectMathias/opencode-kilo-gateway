@@ -21,72 +21,21 @@ Add the plugin package to your OpenCode config:
     "kilo": {
       "name": "Kilo Gateway",
       "npm": "@ai-sdk/openai-compatible",
-      "api": "https://api.kilo.ai/api/openrouter",
-      "models": {
-        "kilo-auto/frontier": {
-          "name": "Kilo Auto Frontier",
-          "limit": { "context": 262144, "output": 32768 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
-        },
-        "kilo-auto/small": {
-          "name": "Kilo Auto Small",
-          "limit": { "context": 131072, "output": 32768 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
-        },
-        "kilo-auto/free": {
-          "name": "Kilo Auto Free",
-          "limit": { "context": 256000, "output": 16384 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
-        },
-        "trinity-large-preview-free": {
-          "name": "Trinity Large Preview Free",
-          "limit": { "context": 131072, "output": 131072 },
-          "modalities": { "input": ["text"], "output": ["text"] }
-        },
-        "glm-4.7-free": {
-          "name": "GLM 4.7 Free",
-          "limit": { "context": 131072, "output": 65536 },
-          "modalities": { "input": ["text"], "output": ["text"] }
-        },
-        "minimax-m2.1-free": {
-          "name": "MiniMax M2.1 Free",
-          "limit": { "context": 204800, "output": 131072 },
-          "modalities": { "input": ["text"], "output": ["text"] }
-        },
-        "kimi-k2.5-free": {
-          "name": "Kimi K2.5 Free",
-          "limit": { "context": 262144, "output": 262144 },
-          "modalities": { "input": ["text", "image", "video"], "output": ["text"] }
-        },
-        "minimax-m2.1": {
-          "name": "MiniMax M2.1",
-          "limit": { "context": 204800, "output": 131072 },
-          "modalities": { "input": ["text"], "output": ["text"] }
-        },
-        "kimi-k2.5": {
-          "name": "Kimi K2.5",
-          "limit": { "context": 262144, "output": 262144 },
-          "modalities": { "input": ["text", "image", "video"], "output": ["text"] }
-        },
-        "claude-sonnet-4-5": {
-          "name": "Claude Sonnet 4.5",
-          "limit": { "context": 1000000, "output": 64000 },
-          "modalities": { "input": ["text", "image", "pdf"], "output": ["text"] }
-        },
-        "gpt-5": {
-          "name": "GPT-5",
-          "limit": { "context": 400000, "output": 128000 },
-          "modalities": { "input": ["text", "image"], "output": ["text"] }
-        }
-      }
+      "api": "https://api.kilo.ai/api/openrouter"
     }
   },
-  "model": "kilo/kilo-auto/frontier",
-  "small_model": "kilo/kilo-auto/small"
+  "model": "kilo/kilo-auto/free"
 }
 ```
 
-These are seed models to register the `kilo` provider with realistic Kilo options before the plugin refresh runs. After startup and after auth, the plugin fetches the live Kilo catalog from `/models` and uses that authoritative list.
+You do not need a static `models` block. The plugin registers the `kilo` provider during config init, fetches the live Kilo catalog from `/models`, and keeps the model list dynamic.
+
+Visibility rules:
+
+- logged out: only models containing `free` are shown
+- logged in: the full Kilo model catalog is shown
+
+If the live fetch fails during startup, the plugin falls back to `kilo-auto/free` so the provider still loads.
 
 ## Login
 
@@ -108,16 +57,10 @@ You can also paste a token using the `Manual Kilo Token` auth method.
 Example:
 
 ```bash
-opencode run "Hello" --model=kilo/kilo-auto/frontier
+opencode run "Hello" --model=kilo/kilo-auto/free
 ```
 
-The seed config now includes:
-
-- Kilo aliases: `kilo-auto/frontier`, `kilo-auto/small`, `kilo-auto/free`
-- free catalog examples: `trinity-large-preview-free`, `glm-4.7-free`, `minimax-m2.1-free`, `kimi-k2.5-free`
-- paid catalog examples: `minimax-m2.1`, `kimi-k2.5`, `claude-sonnet-4-5`, `gpt-5`
-
-If Kilo adds or removes models, the plugin's live `/models` refresh remains the source of truth; these README entries are only the bootstrap provider registration set.
+After login, you can switch to paid or auto-routed models such as `kilo/kilo-auto/frontier` or any other live model returned by the gateway.
 
 ## Optional provider options
 

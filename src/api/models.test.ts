@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { transformModel } from "./models"
+import { filterModelsByAuth, isFreeModel, transformModel } from "./models"
 
 describe("transformModel", () => {
   it("maps Kilo model payload to provider model shape", () => {
@@ -33,5 +33,36 @@ describe("transformModel", () => {
     expect(result.capabilities?.attachment).toBe(true)
     expect(result.limit?.output).toBe(64000)
     expect(result.family).toBe("claude")
+  })
+})
+
+describe("free model visibility", () => {
+  it("detects free models case insensitively", () => {
+    expect(isFreeModel({ id: "minimax-m2.1-free", name: "MiniMax M2.1" })).toBe(true)
+    expect(isFreeModel({ id: "gpt-5", name: "GPT-5" })).toBe(false)
+  })
+
+  it("filters non-free models when logged out", () => {
+    const result = filterModelsByAuth(
+      [
+        { id: "minimax-m2.1-free", name: "MiniMax M2.1 Free", context_length: 1 },
+        { id: "gpt-5", name: "GPT-5", context_length: 1 },
+      ] as any,
+      undefined,
+    )
+
+    expect(result.map((item) => item.id)).toEqual(["minimax-m2.1-free"])
+  })
+
+  it("keeps full list when logged in", () => {
+    const result = filterModelsByAuth(
+      [
+        { id: "minimax-m2.1-free", name: "MiniMax M2.1 Free", context_length: 1 },
+        { id: "gpt-5", name: "GPT-5", context_length: 1 },
+      ] as any,
+      "token-123",
+    )
+
+    expect(result.map((item) => item.id)).toEqual(["minimax-m2.1-free", "gpt-5"])
   })
 })

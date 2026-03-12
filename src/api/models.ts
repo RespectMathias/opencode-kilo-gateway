@@ -69,6 +69,18 @@ function mapModalities(modalities: string[] | null | undefined) {
   }
 }
 
+export function isFreeModel(model: Pick<OpenRouterModel, "id" | "name">): boolean {
+  return /free/i.test(`${model.id} ${model.name}`)
+}
+
+export function filterModelsByAuth(models: OpenRouterModel[], token?: string): OpenRouterModel[] {
+  if (token) {
+    return models
+  }
+
+  return models.filter(isFreeModel)
+}
+
 export function transformModel(model: OpenRouterModel, baseURL: string): ProviderModel {
   const supportedParameters = model.supported_parameters ?? []
   const inputModalities = model.architecture?.input_modalities ?? []
@@ -147,8 +159,9 @@ export async function fetchKiloModels(options: {
   }
 
   const models: Record<string, ProviderModel> = {}
+  const filtered = filterModelsByAuth(parsed.data.data as OpenRouterModel[], token)
 
-  for (const model of parsed.data.data) {
+  for (const model of filtered) {
     if (model.architecture?.output_modalities?.includes("image")) {
       continue
     }
