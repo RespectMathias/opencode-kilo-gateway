@@ -23,6 +23,13 @@ If you only want free models, configure the provider and stop there:
   }
 }
 ```
+Free models where the alpha period has not yet ended as of March 12, 2026:
+
+| Lab      | Model                        |
+| -------- | ---------------------------- |
+| MiniMax  | MiniMax M2.5 (free)          |
+| StepFun  | Step 3.5 Flash (free)        |
+| Arcee AI | Trinity Large Preview (free) |
 
 ## With the plugin
 
