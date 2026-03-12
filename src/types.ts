@@ -104,34 +104,6 @@ export interface KilocodeProfile {
   organizations?: Organization[]
 }
 
-export interface OpenRouterModel {
-  id: string
-  name: string
-  description?: string
-  context_length: number
-  max_completion_tokens?: number | null
-  pricing?: {
-    prompt?: string | null
-    completion?: string | null
-    input_cache_write?: string | null
-    input_cache_read?: string | null
-  }
-  architecture?: {
-    input_modalities?: string[] | null
-    output_modalities?: string[] | null
-  }
-  top_provider?: {
-    max_completion_tokens?: number | null
-  }
-  supported_parameters?: string[]
-  preferredIndex?: number
-  opencode?: {
-    family?: string
-    prompt?: string
-    variants?: Record<string, Record<string, unknown>>
-  }
-}
-
 export interface ResolvedAuth {
   token?: string
   organizationId?: string

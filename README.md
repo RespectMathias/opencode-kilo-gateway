@@ -5,9 +5,8 @@ Use Kilo Gateway as a dedicated `kilo` provider inside OpenCode.
 This plugin adds:
 
 - Kilo device authorization login
-- dynamic model loading from Kilo's OpenRouter-compatible `/models` API
 - Kilo request headers for routed provider calls
-- a dedicated provider configuration path that does not interfere with an existing `openrouter` provider
+- auth loading for a dedicated `kilo` provider configured in OpenCode
 
 ## Install
 
@@ -23,19 +22,11 @@ Add the plugin package to your OpenCode config:
       "npm": "@ai-sdk/openai-compatible",
       "api": "https://api.kilo.ai/api/openrouter"
     }
-  },
-  "model": "kilo/kilo-auto/free"
+  }
 }
 ```
 
-You do not need a static `models` block. The plugin registers the `kilo` provider during config init, fetches the live Kilo catalog from `/models`, and keeps the model list dynamic.
-
-Visibility rules:
-
-- logged out: only models containing `free` are shown
-- logged in: the full Kilo model catalog is shown
-
-If the live fetch fails during startup, the plugin falls back to `kilo-auto/free` so the provider still loads.
+The provider itself is defined in your `opencode.json`. This plugin only supplies Kilo authentication and request loading for that provider.
 
 ## Login
 
@@ -57,10 +48,10 @@ You can also paste a token using the `Manual Kilo Token` auth method.
 Example:
 
 ```bash
-opencode run "Hello" --model=kilo/kilo-auto/free
+opencode run "Hello" --model=kilo/kilo-auto/frontier
 ```
 
-After login, you can switch to paid or auto-routed models such as `kilo/kilo-auto/frontier` or any other live model returned by the gateway.
+Which models appear is controlled by OpenCode's configured `kilo` provider and whatever the gateway returns for that provider path.
 
 ## Optional provider options
 
