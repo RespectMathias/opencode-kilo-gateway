@@ -39,9 +39,7 @@ opencode auth login
 Then choose:
 
 - `kilo`
-- `Kilo Gateway (Device Authorization)`
-
-You can also paste a token using the `Manual Kilo Token` auth method.
+- `Kilo Gateway`
 
 ## Usage
 

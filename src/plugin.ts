@@ -37,12 +37,8 @@ export const KiloGatewayPlugin: Plugin = async () => {
       methods: [
         {
           type: "oauth",
-          label: "Kilo Gateway (Device Authorization)",
+          label: "Kilo Gateway",
           authorize: authorizeWithKiloDeviceAuth,
-        },
-        {
-          type: "api",
-          label: "Manual Kilo Token",
         },
       ],
     },
