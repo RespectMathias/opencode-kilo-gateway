@@ -2,17 +2,10 @@
 
 This plugin adds OAuth device login for the `kilo` provider in OpenCode.
 
-Keep it simple:
-
-- if you only want Kilo free models, you do not need this plugin
-- if you want Kilo account-backed models, use this plugin for OAuth login
-- the `kilo` provider itself still belongs in `opencode.json`
-
 ## Warning
 
-The `kilo` provider configuration itself is just normal provider usage.
-
-The OAuth flow in this plugin may violate Kilo's terms of service or future product restrictions. Use it at your own risk.
+The OAuth in this plugin may violate Kilo's TOS or future product restrictions. Use it at your own risk.
+Using the `kilo` provider doesn't violate TOS, since you did not agree to it.
 
 ## Without the plugin
 
@@ -33,13 +26,13 @@ If you only want free models, configure the provider and stop there:
 
 ## With the plugin
 
-Add the plugin and keep the same provider config:
+If you want to use the models requiring sign in, add the plugin and keep the same provider config:
 
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
   "plugin": [
-    "file:///C:/Users/User/.config/opencode/node_modules/opencode-kilo-gateway/dist/index.js"
+    "opencode-kilo-gateway@latest"
   ],
   "provider": {
     "kilo": {
@@ -50,8 +43,6 @@ Add the plugin and keep the same provider config:
   }
 }
 ```
-
-This plugin only adds OAuth login and Kilo request loading for that provider.
 
 ## Login
 
@@ -64,7 +55,6 @@ opencode auth login
 Then choose:
 
 - `Kilo Gateway`
-- `Kilo Gateway`
 
 You should get the same device flow shape as Kilo CLI:
 
@@ -72,31 +62,7 @@ You should get the same device flow shape as Kilo CLI:
 - code is shown in the terminal
 - OpenCode waits for authorization
 
-## Usage
-
-```bash
-opencode run "Hello" --model=kilo/kilo-auto/frontier
-```
-
 Which models appear is controlled by the configured `kilo` provider and the gateway.
-
-## Optional provider options
-
-```json
-{
-  "provider": {
-    "kilo": {
-      "options": {
-        "baseURL": "https://api.kilo.ai",
-        "kilocodeOrganizationId": "org_123"
-      }
-    }
-  }
-}
-```
-
-- `baseURL` overrides the Kilo API host
-- `kilocodeOrganizationId` forces an organization context
 
 ## Dev
 
@@ -142,8 +108,7 @@ npm run sync:kilo -- <tag-or-commit>
 
 How is this different from other Kilo plugins?
 
-- this one knows Kilo provider setup already populates models
-- you do not need it for free models
-- it provides a working OAuth device login flow
+- this one knows Kilo provider setup already populates models, so you do not need it for free models
+- it provides a working OAuth device login
 - you do not need to choose `Other`
 - it is based directly on Kilo CLI gateway auth code
