@@ -1,6 +1,6 @@
 {
   "name": "opencode-kilo-gateway",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Kilo Gateway provider plugin for OpenCode",
   "author": "respectmathias",
   "main": "./dist/index.js",

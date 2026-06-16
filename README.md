@@ -38,7 +38,7 @@ You should get the same device flow shape as Kilo CLI:
 - code is shown in the terminal
 - OpenCode waits for authorization
 
-Which models appear is controlled by the injected `kilo` provider and the gateway.
+The plugin filters the Kilo model list to free models only. Free models are detected by `free` in the model id or display name.
 
 ## Dev
 
