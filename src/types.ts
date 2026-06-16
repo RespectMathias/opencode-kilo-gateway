@@ -1,13 +1,3 @@
-export interface KiloModelInfo {
-  id?: string;
-  name?: string;
-  family?: string;
-  isFree?: boolean;
-  [key: string]: unknown;
-}
-
-export type KiloModelMap = Record<string, KiloModelInfo>;
-
 export interface OAuthAuthDetails {
   type: "oauth";
   refresh: string;
@@ -21,12 +11,6 @@ export interface ApiKeyAuthDetails {
   key: string;
 }
 
-export interface WellKnownAuthDetails {
-  type: "wellknown";
-  key?: string;
-  token?: string;
-}
-
 export interface UnknownAuthDetails {
   type: string;
   [key: string]: unknown;
@@ -35,7 +19,6 @@ export interface UnknownAuthDetails {
 export type AuthDetails =
   | OAuthAuthDetails
   | ApiKeyAuthDetails
-  | WellKnownAuthDetails
   | UnknownAuthDetails
   | undefined;
 
@@ -49,7 +32,7 @@ export interface ProviderInfo {
   api?: string;
   key?: string;
   options?: Record<string, unknown>;
-  models?: KiloModelMap;
+  models?: Record<string, unknown>;
 }
 
 export interface LoaderResult {
