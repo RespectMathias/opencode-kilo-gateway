@@ -1,1 +1,1 @@
-export { KiloGatewayPlugin, default } from "./src/plugin"
+export { KiloGatewayPlugin, default } from "./src/plugin";

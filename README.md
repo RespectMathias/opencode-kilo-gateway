@@ -33,21 +33,14 @@ Free models where the alpha period has not yet ended as of March 12, 2026:
 
 ## With the plugin
 
-If you want to use the models requiring sign in, add the plugin and keep the same provider config:
+If you want to use the models requiring sign in, add the plugin. The plugin injects the `kilo` provider config automatically:
 
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
   "plugin": [
     "opencode-kilo-gateway@latest"
-  ],
-  "provider": {
-    "kilo": {
-      "name": "Kilo Gateway",
-      "npm": "@ai-sdk/openai-compatible",
-      "api": "https://api.kilo.ai/api/openrouter"
-    }
-  }
+  ]
 }
 ```
 
@@ -69,7 +62,7 @@ You should get the same device flow shape as Kilo CLI:
 - code is shown in the terminal
 - OpenCode waits for authorization
 
-Which models appear is controlled by the configured `kilo` provider and the gateway.
+Which models appear is controlled by the injected `kilo` provider and the gateway.
 
 ## Dev
 
