@@ -7,33 +7,7 @@ This plugin adds OAuth device login for the `kilo` provider in OpenCode.
 The OAuth in this plugin may violate Kilo's TOS or future product restrictions. Use it at your own risk.
 Using the `kilo` provider doesn't violate TOS, since you did not agree to it.
 
-## Without the plugin
-
-If you only want free models, configure the provider and stop there:
-
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "provider": {
-    "kilo": {
-      "name": "Kilo Gateway",
-      "npm": "@ai-sdk/openai-compatible",
-      "api": "https://api.kilo.ai/api/openrouter"
-    }
-  }
-}
-```
-Free models where the alpha period has not yet ended as of March 12, 2026:
-
-| Lab      | Model                        |
-| -------- | ---------------------------- |
-| MiniMax  | MiniMax M2.5 (free)          |
-| StepFun  | Step 3.5 Flash (free)        |
-| Arcee AI | Trinity Large Preview (free) |
-
-## With the plugin
-
-If you want to use the models requiring sign in, add the plugin. The plugin injects the `kilo` provider config automatically:
+The plugin injects the `kilo` provider config automatically:
 
 ```json
 {
@@ -43,6 +17,8 @@ If you want to use the models requiring sign in, add the plugin. The plugin inje
   ]
 }
 ```
+
+You will be able to access the free models without signing in.
 
 ## Login
 
