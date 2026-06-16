@@ -2,6 +2,11 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { KiloGatewayPlugin } from "../src/plugin";
 import { authorizeWithKiloDeviceAuth } from "../src/auth/device-auth";
 
+const models = {
+  paid: { id: "paid", name: "Paid" },
+  free: { id: "catalog", name: "Catalog", isFree: true },
+};
+
 describe("KiloGatewayPlugin", () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -45,6 +50,24 @@ describe("KiloGatewayPlugin", () => {
       api: "https://example.com/openrouter",
       options: { timeout: 1000 },
     });
+  });
+
+  it("registers kilo provider model filtering", async () => {
+    const plugin = await KiloGatewayPlugin({} as never);
+
+    expect(plugin.provider?.id).toBe("kilo");
+    await expect(
+      plugin.provider?.models?.(
+        { id: "kilo", name: "Kilo Gateway", env: [], models },
+        {},
+      ),
+    ).resolves.toEqual({ free: models.free });
+    await expect(
+      plugin.provider?.models?.(
+        { id: "kilo", name: "Kilo Gateway", env: [], models },
+        { auth: { type: "api", key: "secret" } },
+      ),
+    ).resolves.toEqual(models);
   });
 
   it("registers kilo oauth auth", async () => {
@@ -97,5 +120,8 @@ describe("KiloGatewayPlugin", () => {
     expect(headers.get("Existing")).toBe("value");
     expect(headers.get("X-KILOCODE-EDITORNAME")).toBe("OpenCode Kilo Gateway");
     expect(headers.get("X-KILOCODE-ORGANIZATIONID")).toBe("org_123");
+
+    await result?.fetch?.("https://example.com");
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 });

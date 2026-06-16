@@ -8,11 +8,28 @@ import {
   PROVIDER_NAME,
   PROVIDER_NPM_PACKAGE,
 } from "./constants";
-import type { GetAuth, LoaderResult, ProviderInfo } from "./types";
+import { filterFreeModels, shouldShowFreeModelsOnly } from "./models";
+import type { AuthDetails, GetAuth, LoaderResult, ProviderInfo } from "./types";
 
 let activeOrganizationId: string | undefined;
 
-export const KiloGatewayPlugin: Plugin = async () => {
+type PluginHooks = Awaited<ReturnType<Plugin>>;
+type ProviderModelsHook = {
+  id: string;
+  models?: (
+    provider: ProviderInfo,
+    context: { auth?: AuthDetails },
+  ) => Promise<NonNullable<ProviderInfo["models"]>>;
+};
+type KiloGatewayHooks = PluginHooks & {
+  provider?: ProviderModelsHook;
+};
+
+type KiloGatewayPlugin = (
+  input: Parameters<Plugin>[0],
+) => Promise<KiloGatewayHooks>;
+
+export const KiloGatewayPlugin: KiloGatewayPlugin = async () => {
   return {
     config: async (config) => {
       config.provider ??= {};
@@ -22,6 +39,18 @@ export const KiloGatewayPlugin: Plugin = async () => {
         npm: config.provider[PROVIDER_ID]?.npm ?? PROVIDER_NPM_PACKAGE,
         api: config.provider[PROVIDER_ID]?.api ?? KILO_OPENROUTER_BASE,
       };
+    },
+    provider: {
+      id: PROVIDER_ID,
+      models: async (provider, context) => {
+        const models = provider.models ?? {};
+
+        if (!shouldShowFreeModelsOnly(context.auth)) {
+          return models;
+        }
+
+        return filterFreeModels(models);
+      },
     },
     auth: {
       provider: PROVIDER_ID,
@@ -66,4 +95,4 @@ export const KiloGatewayPlugin: Plugin = async () => {
   };
 };
 
-export default KiloGatewayPlugin;
+export default KiloGatewayPlugin as Plugin;

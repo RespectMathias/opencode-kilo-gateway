@@ -40,6 +40,12 @@ You should get the same device flow shape as Kilo CLI:
 
 Which models appear is controlled by the injected `kilo` provider and the gateway.
 
+## Free model filtering
+
+The plugin can detect when you are not logged in and will only show free models in that case. Kilo's OpenCode fork exposes free model metadata, but not Kilo billing/subscription tier details. Logged-in users see all Kilo models.
+
+Free models are detected from Kilo's `isFree` catalog metadata when available, and otherwise by a `free` segment in the model id/name.
+
 ## Dev
 
 Build the plugin locally:
